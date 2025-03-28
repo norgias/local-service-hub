@@ -12,17 +12,30 @@ export default function AuthCallback() {
     async function processAuthCallback() {
       try {
         setIsLoading(true);
+        
+        // Extract hash params for direct token handling
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const idToken = hashParams.get('id_token');
+        
+        // Process the auth callback with token verification
         const { data, error } = await handleAuthCallback();
         
         if (error) {
           throw error;
         }
         
-        if (data?.session) {
+        if (data?.session || data?.redirectTo) {
           toast.success('Logged in successfully!');
+          
+          // If we have a redirectTo URL from token verification, navigate there
+          if (data.redirectTo) {
+            window.location.href = data.redirectTo;
+            return;
+          }
+          
           navigate('/dashboard', { replace: true });
         } else {
-          throw new Error('No session found');
+          throw new Error('Authentication failed');
         }
       } catch (err) {
         console.error('Auth callback error:', err);
@@ -41,7 +54,7 @@ export default function AuthCallback() {
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-teal-400 border-r-transparent"></div>
-          <p className="mt-4">Completing authentication...</p>
+          <p className="mt-4">Verifying your identity...</p>
         </div>
       </div>
     );
