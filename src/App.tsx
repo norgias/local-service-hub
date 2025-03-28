@@ -10,7 +10,8 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
-import AuthCallback from './components/AuthCallback'; // Added import for AuthCallback
+import AuthCallback from './components/AuthCallback'; 
+import SettingsPage from './pages/SettingsPage'; // Import the new SettingsPage
 
 function App() {
   return (
@@ -26,12 +27,21 @@ function App() {
               <Route path="/get-in-touch" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/auth/callback" element={<AuthCallback />} /> {/* Added new route */}
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route
                 path="/dashboard"
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Add the new settings route */}
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <SettingsPage />
                   </ProtectedRoute>
                 }
               />
