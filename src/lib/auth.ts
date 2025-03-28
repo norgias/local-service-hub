@@ -34,7 +34,7 @@ export async function signInWithGoogle() {
   return { data, error };
 }
 
-// New function to verify Google ID token with our Edge Function
+// Function to verify Google ID token with our Edge Function
 export async function verifyGoogleToken(idToken: string) {
   try {
     const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-google-token`, {
@@ -88,4 +88,42 @@ export async function handleAuthCallback() {
   // If no ID token, fall back to checking session (for password auth)
   const { data, error: sessionError } = await supabase.auth.getSession();
   return { data, error: sessionError };
+}
+
+// New function to delete user account
+export async function deleteAccount(userId: string) {
+  try {
+    // First, delete user data from any related tables
+    // 1. Delete business profiles associated with this user
+    const { error: businessError } = await supabase
+      .from('businesses')
+      .delete()
+      .eq('owner_id', userId);
+    
+    if (businessError) {
+      throw businessError;
+    }
+    
+    // 2. Delete bookings associated with this user's businesses
+    const { error: bookingsError } = await supabase
+      .from('bookings')
+      .delete()
+      .eq('user_id', userId);
+    
+    if (bookingsError) {
+      throw bookingsError;
+    }
+    
+    // 3. Finally, delete the user's account from auth.users
+    const { error: userError } = await supabase.auth.admin.deleteUser(userId);
+    
+    if (userError) {
+      throw userError;
+    }
+    
+    return { success: true, error: null };
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    return { success: false, error };
+  }
 }
