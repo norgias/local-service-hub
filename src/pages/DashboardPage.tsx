@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import { signOut } from '../lib/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { Building2, LogOut } from 'lucide-react';
+import { Building2, LogOut, Settings } from 'lucide-react';
 
 interface Business {
   id: string;
@@ -88,15 +88,26 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto">
         <Toaster position="top-center" />
         
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <h1 className="text-3xl font-bold">Business Dashboard</h1>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </button>
+          
+          <div className="flex items-center gap-3 self-end sm:self-auto">
+            <Link
+              to="/settings"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-400 to-blue-400 text-black rounded-lg hover:from-teal-300 hover:to-blue-300 transition-all duration-300"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Settings</span>
+            </Link>
+            
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
 
         {businesses.length === 0 ? (
