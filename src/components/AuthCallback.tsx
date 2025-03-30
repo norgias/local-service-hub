@@ -9,22 +9,18 @@ export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function processAuthCallback() {
+    async function processAuthRedirect() {
       try {
         setIsLoading(true);
         
-        // Extract hash params for direct token handling
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const idToken = hashParams.get('id_token');
-        
-        // Process the auth callback with token verification
+        // Process the auth callback
         const { data, error } = await handleAuthCallback();
         
         if (error) {
           throw error;
         }
         
-        if (data?.session || data?.redirectTo) {
+        if (data?.session || data?.redirectTo || data?.user) {
           toast.success('Logged in successfully!');
           
           // If we have a redirectTo URL from token verification, navigate there
@@ -46,15 +42,15 @@ export default function AuthCallback() {
       }
     }
 
-    processAuthCallback();
+    processAuthRedirect();
   }, [navigate]);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-teal-400 border-r-transparent"></div>
-          <p className="mt-4">Verifying your identity...</p>
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-white text-center">
+          <div className="w-16 h-16 border-4 border-t-teal-400 border-r-teal-400 border-b-transparent border-l-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl">Completing authentication...</p>
         </div>
       </div>
     );
