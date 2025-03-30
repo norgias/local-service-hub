@@ -20,7 +20,7 @@ export default function DeleteAccount() {
     setConfirmText('');
   };
 
-  // Implementation of deleteAccount that uses the Supabase Edge Function
+  // Updated implementation of deleteAccount that fixes CORS issues
   const deleteAccount = async (userId) => {
     if (!userId) {
       return { success: false, error: new Error('No user ID provided') };
@@ -35,20 +35,37 @@ export default function DeleteAccount() {
       }
 
       // Call the Supabase Edge Function to delete the account
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-account`, {
+      // Using direct URL instead of environment variable to ensure correct URL is used
+      const response = await fetch('https://wwcvfpnopkhuigoobwji.supabase.co/functions/v1/delete-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`
-        }
+        },
+        // Adding empty body to ensure proper request formatting
+        body: JSON.stringify({})
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete account');
+        // Try to get error details if available
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Failed to delete account: ${response.status}`);
+        } catch (jsonError) {
+          // If response isn't valid JSON, use status text
+          throw new Error(`Failed to delete account: ${response.status} ${response.statusText}`);
+        }
       }
 
-      const result = await response.json();
+      // Parse response safely
+      let result;
+      try {
+        result = await response.json();
+      } catch (jsonError) {
+        // If response isn't valid JSON but status was OK, we still succeeded
+        result = { success: true };
+      }
+      
       return { success: true, data: result };
     } catch (error) {
       console.error('Error in deleteAccount:', error);
@@ -76,6 +93,8 @@ export default function DeleteAccount() {
         toast.success('Your account has been successfully deleted');
         // Log the user out and redirect to home page
         await logout();
+        // Clear any potential remaining auth data
+        localStorage.removeItem('supabase.auth.token');
         navigate('/', { replace: true });
       }
     } catch (error) {
