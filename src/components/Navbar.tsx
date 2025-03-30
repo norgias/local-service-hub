@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { Building2, User, Menu, X } from 'lucide-react'; // Added Menu and X icons
@@ -6,11 +6,37 @@ import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = React.useState(false);
   const { user } = useAuth();
+  const dropdownRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const toggleCategories = (e) => {
+    e.stopPropagation();
+    setIsCategoriesOpen(!isCategoriesOpen);
+  };
+
+  // Handle clicks outside the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsCategoriesOpen(false);
+      }
+    };
+
+    // Add event listener when the dropdown is open
+    if (isCategoriesOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // Clean up the event listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCategoriesOpen]);
 
   return (
     <nav className="bg-black/95 text-white fixed w-full z-50 backdrop-blur-sm">
@@ -30,23 +56,29 @@ export default function Navbar() {
           {/* Desktop menu */}
           <div className="hidden md:block">
             <div className="flex items-center space-x-4">
-              <div className="relative group">
-                <button className="hover:text-teal-400 transition-colors">
+              <div className="relative" ref={dropdownRef}>
+                <button 
+                  className="hover:text-teal-400 transition-colors" 
+                  onClick={toggleCategories}
+                >
                   Categories
                 </button>
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-black/95 ring-1 ring-black ring-opacity-5 hidden group-hover:block hover:block">
-                  <div className="py-1">
-                    {categories.map((category) => (
-                      <Link
-                        key={category.id}
-                        to={`/category/${category.id}`}
-                        className="block px-4 py-2 text-sm hover:bg-purple-500/20 hover:text-teal-400"
-                      >
-                        {category.icon} {category.name}
-                      </Link>
-                    ))}
+                {isCategoriesOpen && (
+                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-black/95 ring-1 ring-black ring-opacity-5">
+                    <div className="py-1">
+                      {categories.map((category) => (
+                        <Link
+                          key={category.id}
+                          to={`/category/${category.id}`}
+                          className="block px-4 py-2 text-sm hover:bg-purple-500/20 hover:text-teal-400"
+                          onClick={() => setIsCategoriesOpen(false)}
+                        >
+                          {category.icon} {category.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <Link to="/get-in-touch" className="hover:text-teal-400 transition-colors">
                 Get in Touch
