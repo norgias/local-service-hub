@@ -5,7 +5,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const GOOGLE_TOKEN_INFO_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo';
 
 // Your Google OAuth Client ID (used to verify the token was issued for your app)
-const GOOGLE_CLIENT_ID = Deno.env.get('633895495621-d6q47mdhp5sv93id6akufncmel6eq4er.apps.googleusercontent.com');
+const GOOGLE_CLIENT_ID = Deno.env.get('GOOGLE_CLIENT_ID');
 
 interface TokenVerificationRequest {
   idToken: string;
