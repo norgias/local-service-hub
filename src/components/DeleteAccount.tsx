@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { supabase } from '../lib/supabaseClient'; // Adjust this import based on your project structure
+import { supabase } from '../lib/supabase'; // This matches your existing file path
 
 export default function DeleteAccount() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function DeleteAccount() {
     setConfirmText('');
   };
 
-  // New implementation of deleteAccount that uses the Supabase Edge Function
+  // Implementation of deleteAccount that uses the Supabase Edge Function
   const deleteAccount = async (userId) => {
     if (!userId) {
       return { success: false, error: new Error('No user ID provided') };
