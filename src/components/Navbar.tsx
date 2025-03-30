@@ -34,7 +34,7 @@ export default function Navbar() {
                 <button className="hover:text-teal-400 transition-colors">
                   Categories
                 </button>
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-black/95 ring-1 ring-black ring-opacity-5 hidden group-hover:block">
+                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-black/95 ring-1 ring-black ring-opacity-5 hidden group-hover:block hover:block">
                   <div className="py-1">
                     {categories.map((category) => (
                       <Link
