@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteAccount } from '../lib/auth';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import { supabase } from '../lib/supabaseClient'; // Adjust this import based on your project structure
 
 export default function DeleteAccount() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +18,42 @@ export default function DeleteAccount() {
   const handleCloseModal = () => {
     setIsOpen(false);
     setConfirmText('');
+  };
+
+  // New implementation of deleteAccount that uses the Supabase Edge Function
+  const deleteAccount = async (userId) => {
+    if (!userId) {
+      return { success: false, error: new Error('No user ID provided') };
+    }
+
+    try {
+      // Get the current session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        return { success: false, error: new Error('No active session found') };
+      }
+
+      // Call the Supabase Edge Function to delete the account
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/delete-account`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete account');
+      }
+
+      const result = await response.json();
+      return { success: true, data: result };
+    } catch (error) {
+      console.error('Error in deleteAccount:', error);
+      return { success: false, error };
+    }
   };
 
   const handleDeleteAccount = async () => {
