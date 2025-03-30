@@ -10,7 +10,7 @@ import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
-import AuthCallback from './components/AuthCallback'; 
+import AuthCallbackPage from './components/AuthCallbackPage'; 
 import SettingsPage from './pages/SettingsPage'; // Import the new SettingsPage
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
               <Route path="/get-in-touch" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/auth/callback" element={<AuthCallbackPage />} />
               <Route
                 path="/dashboard"
                 element={
