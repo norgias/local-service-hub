@@ -20,7 +20,7 @@ export default function DeleteAccount() {
     setConfirmText('');
   };
 
-  // Updated implementation of deleteAccount that fixes CORS issues
+  // Updated implementation of deleteAccount with improved CORS handling
   const deleteAccount = async (userId) => {
     if (!userId) {
       return { success: false, error: new Error('No user ID provided') };
@@ -37,18 +37,20 @@ export default function DeleteAccount() {
       console.log('Attempting to delete account with user ID:', userId);
       
       // Call the Supabase Edge Function to delete the account
-      // Updated to use the correct function name: delete-user-account
       const response = await fetch('https://wwcvfpnopkhuigoobwji.supabase.co/functions/v1/delete-user-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`
         },
-        // Include userId in the request body for better server-side handling
+        // The backend function only uses the Authorization header, but we'll
+        // keep the body for debugging purposes
         body: JSON.stringify({
           userId: userId,
-          timestamp: new Date().toISOString() // Helpful for debugging
-        })
+          timestamp: new Date().toISOString()
+        }),
+        // Add credentials: 'include' to ensure cookies are sent with the request
+        credentials: 'include'
       });
 
       console.log('Delete account response status:', response.status);
