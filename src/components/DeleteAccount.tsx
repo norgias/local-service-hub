@@ -34,25 +34,34 @@ export default function DeleteAccount() {
         return { success: false, error: new Error('No active session found') };
       }
 
+      console.log('Attempting to delete account with user ID:', userId);
+      
       // Call the Supabase Edge Function to delete the account
-      // Using direct URL instead of environment variable to ensure correct URL is used
-      const response = await fetch('https://wwcvfpnopkhuigoobwji.supabase.co/functions/v1/delete-account', {
+      // Updated to use the correct function name: delete-user-account
+      const response = await fetch('https://wwcvfpnopkhuigoobwji.supabase.co/functions/v1/delete-user-account', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`
         },
-        // Adding empty body to ensure proper request formatting
-        body: JSON.stringify({})
+        // Include userId in the request body for better server-side handling
+        body: JSON.stringify({
+          userId: userId,
+          timestamp: new Date().toISOString() // Helpful for debugging
+        })
       });
+
+      console.log('Delete account response status:', response.status);
 
       if (!response.ok) {
         // Try to get error details if available
         try {
           const errorData = await response.json();
+          console.error('Error response data:', errorData);
           throw new Error(errorData.error || `Failed to delete account: ${response.status}`);
         } catch (jsonError) {
           // If response isn't valid JSON, use status text
+          console.error('Error parsing error response:', jsonError);
           throw new Error(`Failed to delete account: ${response.status} ${response.statusText}`);
         }
       }
@@ -61,7 +70,9 @@ export default function DeleteAccount() {
       let result;
       try {
         result = await response.json();
+        console.log('Delete account success response:', result);
       } catch (jsonError) {
+        console.warn('Could not parse JSON response, but status was OK');
         // If response isn't valid JSON but status was OK, we still succeeded
         result = { success: true };
       }
