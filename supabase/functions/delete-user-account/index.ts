@@ -2,12 +2,15 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+// Define CORS headers directly in this file
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'https://localservicehub.net',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS, DELETE',
+  'Access-Control-Max-Age': '86400'
+}
 
-//Import CORS headers from shared file
-import { corsHeaders } from '../_shared/cors.ts'
-
-
-serve(async (req) => {
+serve(async (req)  => {
   // Handle CORS preflight OPTIONS request immediately
   if (req.method === 'OPTIONS') {
     console.log('Handling OPTIONS preflight request')
@@ -16,9 +19,7 @@ serve(async (req) => {
       headers: corsHeaders
     })
   }
-
   console.log(`Received ${req.method} request`)
-
   // Continue with the rest of your function...
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
@@ -38,9 +39,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
-
     const token = authHeader.replace('Bearer ', '')
-
     // Create a Supabase client with Admin privileges
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -50,10 +49,8 @@ serve(async (req) => {
         auth: { persistSession: false }
       }
     )
-
     // Verify the token and get the user
     const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token)
-
     if (userError || !user) {
       console.error('User verification error:', userError)
       return new Response(JSON.stringify({ error: 'Unauthorized', details: userError }), {
@@ -61,10 +58,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
-
     const userId = user.id
     console.log(`Authenticated user ID: ${userId}`)
-
     // Get user email before deletion
     const { data: userData, error: userDataError } = await supabaseAdmin.auth.admin.getUserById(userId)
       
@@ -78,7 +73,6 @@ serve(async (req) => {
     const { error: transactionError } = await supabaseAdmin.rpc('delete_user_data', {
       user_id: userId
     })
-
     if (transactionError) {
       console.error('Transaction error:', transactionError)
       return new Response(JSON.stringify({ error: 'Failed to delete user data', details: transactionError }), {
@@ -86,10 +80,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
-
     // Delete the user from auth.users table
     const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(userId)
-
     if (deleteUserError) {
       console.error('Delete user error:', deleteUserError)
       return new Response(JSON.stringify({ error: 'Failed to delete user account', details: deleteUserError }), {
@@ -97,9 +89,7 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
-
     console.log(`Successfully deleted user: ${userId}`)
-
     return new Response(JSON.stringify({ 
       success: true, 
       message: 'Account deleted successfully' 
