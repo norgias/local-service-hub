@@ -1,14 +1,21 @@
 // supabase/functions/delete-user-account/index.ts
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { corsHeaders } from '../_shared/cors.ts'
+
+// Define CORS headers directly in this file for simplicity
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*', // Allow any origin for testing, change to your domain in production
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS, DELETE',
+  'Access-Control-Max-Age': '86400'
+}
 
 serve(async (req) => {
-  // IMPORTANT: Always handle OPTIONS requests first
+  // Handle CORS preflight OPTIONS request immediately
   if (req.method === 'OPTIONS') {
     console.log('Handling OPTIONS preflight request')
     return new Response(null, {
-      status: 204, // Use 204 No Content for OPTIONS
+      status: 204, // No Content is appropriate for OPTIONS
       headers: corsHeaders
     })
   }
