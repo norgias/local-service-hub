@@ -46,11 +46,11 @@ export default function Navbar() {
             <Link to="/" className="flex items-center space-x-2">
               <Building2 className="h-8 w-8 text-teal-400" />
               <span className="text-xl font-bold bg-gradient-to-r from-teal-400 via-blue-400 to-purple-400 text-transparent bg-clip-text">
-                LocalServiceHub
+                Call Bounce 
               </span>
             </Link>
-            <span className="hidden sm:inline text-white">Greater Toronto Area</span>
-            <span className="inline sm:hidden text-white">GTA</span>
+            <span className="hidden sm:inline text-white"></span>
+            <span className="inline sm:hidden text-white"></span>
           </div>
 
           {/* Desktop menu */}
