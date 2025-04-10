@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { categories } from '../data/categories';
-import { Building2, User, Menu, X } from 'lucide-react'; // Added Menu and X icons
+import { Phone, User, Menu, X } from 'lucide-react'; // Changed Building2 to Phone
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
@@ -44,7 +44,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
             <Link to="/" className="flex items-center space-x-2">
-              <Building2 className="h-8 w-8 text-teal-400" />
+              <Phone className="h-8 w-8 text-teal-400" /> {/* Changed to Phone icon */}
               <span className="text-xl font-bold bg-gradient-to-r from-teal-400 via-blue-400 to-purple-400 text-transparent bg-clip-text">
                 Call Bounce 
               </span>
