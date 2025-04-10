@@ -12,10 +12,10 @@ export default function Home() {
         <HeroCarousel />
         <div className="relative z-20 text-center px-4">
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-teal-400 via-blue-400 to-purple-400 text-transparent bg-clip-text">
-            All your trusted local services under one roof
+            Bounce back from missed Calls!
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Discover and connect with verified local businesses for all your service needs
+            Studies show that the average small business loses $150-$250 per missed call. Stop missing out, sign up today!
           </p>
         </div>
       </div>
