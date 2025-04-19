@@ -25,8 +25,9 @@ export default function SignupPage() {
       const { error } = await signUp(formData.email, formData.password);
       if (error) throw error;
 
-      toast.success('Account created successfully! Please log in.');
-      navigate('/login');
+      // Change redirect to check-email page instead of login
+      toast.success('Account created! Please check your email to verify.');
+      navigate('/check-email');
     } catch (error) {
       toast.error('Failed to create account. Please try again.');
     } finally {
