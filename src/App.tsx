@@ -11,7 +11,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import AuthCallback from './components/AuthCallback'; 
-import SettingsPage from './pages/SettingsPage'; // Import the new SettingsPage
+import SettingsPage from './pages/SettingsPage';
+import CheckEmailPage from './pages/CheckEmailPage'; // Import the CheckEmailPage
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/get-in-touch" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/check-email" element={<CheckEmailPage />} /> {/* Add route for CheckEmailPage */}
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route
                 path="/dashboard"
@@ -36,7 +38,6 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* Add the new settings route */}
               <Route
                 path="/settings"
                 element={
