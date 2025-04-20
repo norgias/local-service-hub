@@ -22,7 +22,7 @@ export default function Navbar() {
                 Call Bounce 
               </span>
             </Link>
-            <span className="hidden sm:inline text-white">Automated missed callback service</span>
+            <span className="hidden sm:inline text-white">Automated missed call text-back service</span>
             <span className="inline sm:hidden text-white"></span>
           </div>
 
