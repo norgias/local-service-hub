@@ -1,0 +1,80 @@
+Folder PATH listing for volume Windows-SSD
+Volume serial number is D659-F569
+C:.
+|   delete_user_data.sql
+|   eslint.config.js
+|   index.html
+|   netlify.toml
+|   package-lock.json
+|   package.json
+|   postcss.config.js
+|   structure.txt
+|   tailwind.config.js
+|   tsconfig.app.json
+|   tsconfig.json
+|   tsconfig.node.json
+|   vite.config.ts
+|   
++---dist
+|   |   index.html
+|   |   
+|   \---assets
+|           browser-B9bMuk7T.js
+|           index-DT7nazQO.css
+|           index-DyXN3uKK.js
+|           
++---src
+|   |   App.tsx
+|   |   index.css
+|   |   main.tsx
+|   |   vite-env.d.ts
+|   |   
+|   +---components
+|   |       AuthCallback.tsx
+|   |       CategoryCard.tsx
+|   |       DeleteAccount.tsx
+|   |       HeroCarousel.tsx
+|   |       Navbar.tsx
+|   |       ProtectedRoute.tsx
+|   |       
+|   +---contexts
+|   |       AuthContext.tsx
+|   |       
+|   +---data
+|   |       categories.ts
+|   |       
+|   +---lib
+|   |       auth.ts
+|   |       supabase.ts
+|   |       
+|   +---pages
+|   |       BookingPage.tsx
+|   |       CategoryPage.tsx
+|   |       CheckEmailPage.tsx
+|   |       ContactPage.tsx
+|   |       DashboardPage.tsx
+|   |       Home.tsx
+|   |       LoginGuide.tsx
+|   |       LoginPage.tsx
+|   |       SettingsPage.tsx
+|   |       SignupPage.tsx
+|   |       
+|   \---types
+|           business.ts
+|           supabase.ts
+|           
+\---supabase
+    +---functions
+    |   +---delete-user-account
+    |   |       index.ts
+    |   |       
+    |   +---verify-google-token
+    |   |       .env.example
+    |   |       index.ts
+    |   |       
+    |   \---_shared
+    |           cors.ts
+    |           
+    \---migrations
+            20250326171947_maroon_grass.sql
+            
